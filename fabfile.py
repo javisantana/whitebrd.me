@@ -22,7 +22,7 @@ def install():
     """ install base system on ubuntu machine """
     # apt-get's
     sudo("aptitude update")
-    pkgs = ['git-core', 'python-dev', 'build-essential', 'nginx', 'python-setuptools', 'supervisor']
+    pkgs = ['git-core', 'python-dev', 'build-essential', 'nginx', 'python-setuptools']
     pkg_install(' '.join(pkgs))
 
     # target folder
@@ -68,9 +68,10 @@ def reload():
     # start supervisord
     with settings(warn_only=True):
         sudo("supervisord")
-    sudo("invoke-rc.d nginx restart")
-    sudo("supervisorctl restart reload")
+    sudo("supervisorctl reload") # reload supervisor conf
     sudo("supervisorctl restart tornado")
+    # nginx
+    sudo("invoke-rc.d nginx restart")
 
 def update_dependencies():
     """ update depencies from requirements """
