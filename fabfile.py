@@ -56,16 +56,16 @@ def install():
 
 
 def install_redis():
-    redis_file = 'http://redis.googlecode.com/files/redis-2.2.2.tar.gz'
+    redis_url = 'http://redis.googlecode.com/files/redis-2.2.2.tar.gz'
+    redis_file = redis_url.split('/')[-1]
     redis_folder = redis_file.split('/')[-1][:-7]
     with cd('/tmp'):
-       run("wget " + redis_file)
-       redis_file = redis_file.split('/')[-1] # hack
        run("rm -rf " + redis_file)
+       run("wget " + redis_url)
        run("tar -xzf " + redis_file)
        with cd(redis_folder):
          run("make")
-    sudo("cp src/redis-server /usr/bin")
+         sudo("cp src/redis-server /usr/bin")
     sudo("rm -rf /etc/redis.conf")
     sudo("ln -s %(deploy_folder)s/app/deploy/redis.conf /etc/redis.conf" % env)
        
