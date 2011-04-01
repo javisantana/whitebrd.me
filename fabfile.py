@@ -7,12 +7,15 @@ deployement script
 from fabric.api import run, sudo, env
 from fabric.context_managers import cd, show, settings
 from fabric.contrib.project import upload_project
+from fabric.contrib.files import exists
+
+from hosts import *
 
 env.user = 'rambot'
-env.password = 'ramboFTW'
+env.password = ''
 env.hosts = ['127.0.0.1:2224']
-env.deploy_folder = '/home/rambot/bbrd.com'
-env.git_repo = 'git://...'
+env.deploy_folder = '/home/rambot/whitebrd.me'
+env.git_repo = 'https://github.com/javisantana/whitebrd.me'
 
 def pkg_install(pkg):
     """ install pkg using apt-get """
@@ -36,14 +39,12 @@ def install():
     run("%s/env/bin/pip install -U pip" % env.deploy_folder)
 
     # clone repo
-    #with cd(env.deploy_folder):
-    #run("git clone %s app" % env.git_repo)
-    run("mkdir -p %s/app" % env.deploy_folder)
-    with show('debug'):
-        with cd(env.deploy_folder + "/app"):
-            upload_project()
+    if not exists(env.deploy_folder + "/app"):
+        with cd(env.deploy_folder):
+            run("git clone %s app" % env.git_repo)
 
     sudo("rm -rf /etc/nginx/nginx.conf")
+    sudo("rm -rf /etc/supervisord.conf" % env)
     
     # configuration
     sudo("ln -s %(deploy_folder)s/app/deploy/nginx.conf /etc/nginx/nginx.conf" % env)
@@ -52,14 +53,23 @@ def install():
     update_dependencies()
 
 
+def _install_redis():
+    redis_file = 'http://redis.googlecode.com/files/redis-2.2.2.tar.gz'
+    redis_folder = redis_file.split('/')[-1][:-7]
+    with cd('/tmp'):
+       run("wget " + redis_file)
+       run("tar -xzf " + redis_file)
+       with cd(redis_folder):
+         run("make")
+       
+
 def update_files():
-    #with cd(env.deploy_folder + "/app"):
-        upload_project()
+    with cd(env.deploy_folder + "/app"):
+        run("git pull")
 
 def deploy():
     """ deploy repo """
-    with cd(env.deploy_folder + "/app"):
-        run("git pull")
+    update_files()
     update_dependencies()
     reload()
 
