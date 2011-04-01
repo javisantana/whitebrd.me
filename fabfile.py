@@ -5,12 +5,12 @@ deployement script
 """
 
 from fabric.api import run, sudo, env
-from fabric.context_managers import cd
+from fabric.context_managers import cd, show, settings
 from fabric.contrib.project import upload_project
 
 env.user = 'rambot'
 env.password = 'ramboFTW'
-env.hosts = ['127.0.0.1:2223']
+env.hosts = ['127.0.0.1:2224']
 env.deploy_folder = '/home/rambot/bbrd.com'
 env.git_repo = 'git://...'
 
@@ -22,7 +22,7 @@ def install():
     """ install base system on ubuntu machine """
     # apt-get's
     sudo("aptitude update")
-    pkgs = ['git-core', 'python-dev', 'build-essential', 'nginx', 'python-setuptools']
+    pkgs = ['git-core', 'python-dev', 'build-essential', 'nginx', 'python-setuptools', 'supervisor']
     pkg_install(' '.join(pkgs))
 
     # target folder
@@ -39,14 +39,18 @@ def install():
     #with cd(env.deploy_folder):
     #run("git clone %s app" % env.git_repo)
     run("mkdir -p %s/app" % env.deploy_folder)
-    with cd(env.deploy_folder + "/app"):
-        upload_project()
+    with show('debug'):
+        with cd(env.deploy_folder + "/app"):
+            upload_project()
 
-    sudo("rm -rf /etc/nginx.conf")
+    sudo("rm -rf /etc/nginx/nginx.conf")
     
     # configuration
-    sudo("ln -s %(deploy_folder)s/app/deploy/nginx.conf /etc/nginx.conf" % env)
+    sudo("ln -s %(deploy_folder)s/app/deploy/nginx.conf /etc/nginx/nginx.conf" % env)
     sudo("ln -s %(deploy_folder)s/app/deploy/supervisord.conf /etc/supervisord.conf" % env)
+
+    update_dependencies()
+
 
 def update_files():
     #with cd(env.deploy_folder + "/app"):
@@ -61,10 +65,14 @@ def deploy():
 
 def reload():
     """ restart services """
+    # start supervisord
+    with settings(warn_only=True):
+        sudo("supervisord")
     sudo("invoke-rc.d nginx restart")
+    sudo("supervisorctl restart reload")
     sudo("supervisorctl restart tornado")
 
 def update_dependencies():
     """ update depencies from requirements """
-    sudo("%(deploy_folder)s/env/bin/pip install -r %(deploy_folder)s/app/requirements.txt" % env)
+    sudo("%(deploy_folder)s/env/bin/pip install -r %(deploy_folder)s/app/src/requirements.txt" % env)
     
