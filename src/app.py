@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 
+import logging
 import os
 import brukva
 import tornado.httpserver
@@ -9,51 +10,49 @@ import tornado.ioloop
 
 from tornado.options import define, options
 
-
-c = brukva.Client()
-c.connect()
-
+redis = brukva.Client()
+redis.connect()
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("template.html", title="Websocket test")
 
-
-class NewMessage(tornado.web.RequestHandler):
-    def post(self):
-        message = self.get_argument('message')
-        c.publish('test_channel', message)
-        self.set_header('Content-Type', 'text/plain')
-        self.write('sent: %s' % (message,))
-
-
 class MessagesCatcher(tornado.websocket.WebSocketHandler):
+
     def __init__(self, *args, **kwargs):
         super(MessagesCatcher, self).__init__(*args, **kwargs)
+        self.board_name = 'board:1'
         self.client = brukva.Client()
         self.client.connect()
-        self.client.subscribe('test_channel')
+        self.client.subscribe(self.board_name)
 
     def open(self):
-        self.client.listen(self.on_message)
+        #logging.info("opened connection")
+        self.client.listen(self.on_new_board_message)
 
-    def on_message(self, result):
+    def on_new_board_message(self, result):
+        """ called when other client draws """
+        # publish in the channel
         (error, data) = result
         if not error:
-            self.write_message(str(data.body))
+            self.write_message(data.body)
+
+    def on_message(self, result):
+        """ client message with draw command """
+            # publish to other clients
+        redis.publish(self.board_name, result)
 
     def close(self):
-        self.client.unsubscribe('test_channel')
+        self.client.unsubscribe(self.board_name)
         self.client.disconnect()
 
 
-define("port", default=8888, help="run on the given port", type=int)
+define("port", default=8000, help="run on the given port", type=int)
 
 class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
             (r'/', MainHandler),
-            (r'/msg', NewMessage),
             (r'/track', MessagesCatcher),
         ]
         settings = dict(

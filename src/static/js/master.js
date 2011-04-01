@@ -14,9 +14,12 @@ var wbcanvas = function(id, connector) {
     var lastpos = [0,0];
 
     function send(c) {
-        console.log(c);
         evaluate(c);
         connector.send(JSON.stringify(c));
+    }
+    
+    connector.on_message = function(data) {
+        evaluate(data);
     }
     
     function line(p0, p1) {
@@ -57,14 +60,24 @@ var wbcanvas = function(id, connector) {
 }
 
 var whiteboard = function() {
+    var ws;
+
+    this.on_message = function(data) {
+        console.log(data);
+    }
     this.init = function() {
-        var ws = new WebSocket("ws://127.0.0.1:8888/track");
+        ws = new WebSocket("ws://" + window.location.host+ "/track");
         ws.onopen = function() {
         }
         ws.onmessage = function(event) {
+            on_message(JSON.parse(event.data));
         }
         ws.onclose = function() {
         }
+    }
+
+    this.send = function(data) {
+        ws.send(data);
     }
     return this;
 }
