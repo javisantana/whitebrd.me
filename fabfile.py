@@ -42,6 +42,8 @@ def install():
     if not exists(env.deploy_folder + "/app"):
         with cd(env.deploy_folder):
             run("git clone %s app" % env.git_repo)
+    else:
+        update_files()
 
     sudo("rm -rf /etc/nginx/nginx.conf")
     sudo("rm -rf /etc/supervisord.conf" % env)
@@ -53,14 +55,19 @@ def install():
     update_dependencies()
 
 
-def _install_redis():
+def install_redis():
     redis_file = 'http://redis.googlecode.com/files/redis-2.2.2.tar.gz'
     redis_folder = redis_file.split('/')[-1][:-7]
     with cd('/tmp'):
        run("wget " + redis_file)
+       redis_file = redis_file.split('/')[-1] # hack
+       run("rm -rf " + redis_file)
        run("tar -xzf " + redis_file)
        with cd(redis_folder):
          run("make")
+    sudo("cp src/redis-server /usr/bin")
+    sudo("rm -rf /etc/redis.conf")
+    sudo("ln -s %(deploy_folder)s/app/deploy/redis.conf /etc/redis.conf" % env)
        
 
 def update_files():
@@ -80,6 +87,7 @@ def reload():
         sudo("supervisord")
     sudo("supervisorctl reload") # reload supervisor conf
     sudo("supervisorctl restart tornado")
+    sudo("supervisorctl restart redis")
     # nginx
     sudo("invoke-rc.d nginx restart")
 
