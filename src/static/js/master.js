@@ -72,11 +72,18 @@ var whiteboard = function() {
         console.log(data);
     }
     this.init = function(board) {
-        ws = new WebSocket("ws://" + window.location.host+ ":8000/track/" + board);
+        var url = "ws://" + window.location.host;
+        if (location.port == "") {
+            url += ":8000";
+        }
+        url += "/track/" + board;
+        ws = new WebSocket(url);
         ws.onopen = function() {
         }
         ws.onmessage = function(event) {
+            console.log(event.data);
             on_message(JSON.parse(event.data));
+
         }
         ws.onclose = function() {
         }
