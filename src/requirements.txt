@@ -1,3 +1,4 @@
 
 tornado
 -e git+https://github.com/kmerenkov/brukva.git#egg=brukva
+redis
