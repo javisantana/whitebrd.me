@@ -9,16 +9,18 @@
         <link rel="stylesheet" href="{{ static_url("css/master.css") }}" type="text/css" />
 
         <script>
-        $(document).ready(function() {
-            $.ajax({
-                url: '/new_board/',
-                method: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                
-                }
+            $(document).ready(function() {
+                $("#new_board").click(function() {
+                    $.ajax({
+                    url: '/new_board/',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $("#go_board").attr("href", '/board/' + data);
+                        $("#go_board").toggle()
+                    }
+                });
             });
-            
         });
         </script>
     </head>
@@ -27,7 +29,9 @@
     </div>
     <div id="">
         Indice
-        
+        <a href="#" id="new_board">new board</a>
+        <a href="#" id="go_board" style="display:none">new board</a>
+
     </div>
 
         
