@@ -26,6 +26,10 @@ class MessagesCatcher(tornado.websocket.WebSocketHandler):
         self.client.connect()
         self.client.subscribe(self.board_name)
 
+    def on_connection_close(self):
+        #import ipbd; ipdb.set_trace()
+        pass
+
     def open(self):
         #logging.info("opened connection")
         self.client.listen(self.on_new_board_message)
@@ -35,7 +39,12 @@ class MessagesCatcher(tornado.websocket.WebSocketHandler):
         # publish in the channel
         (error, data) = result
         if not error:
-            self.write_message(data.body)
+            try:
+                self.write_message(data.body)   
+            except IOError as e:
+                # when client closes the page websocket is not closed
+                # but connection do, so unsuscribe from channel
+                self.close()
 
     def on_message(self, result):
         """ client message with draw command """
@@ -43,8 +52,14 @@ class MessagesCatcher(tornado.websocket.WebSocketHandler):
         redis.publish(self.board_name, result)
 
     def close(self):
+        try:
+            super(MessagesCatcher, self).close()
+        except IOError:
+            pass # java rocks
+            
         self.client.unsubscribe(self.board_name)
         self.client.disconnect()
+        del self.client
 
 
 define("port", default=8000, help="run on the given port", type=int)
