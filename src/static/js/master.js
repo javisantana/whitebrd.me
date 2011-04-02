@@ -6,10 +6,11 @@ var wbcanvas = function(id, connector) {
     var drawing = false;
     var canvas = document.getElementById('whiteboard');
     var ctx = canvas.getContext('2d');
-    var srcX = obj.position().left;
-    var srcY = obj.position().top;
+    var srcX = 0; //obj.position().left;
+    var srcY = 0; //obj.position().top;
     canvas.width = 800;
     canvas.height = 800;
+    var color = "rgba(0, 0, 0, 1)";
 
     var lastpos = [0,0];
 
@@ -22,9 +23,13 @@ var wbcanvas = function(id, connector) {
         evaluate(data);
     }
     
+    this.set_color = function(c) {
+        color = c;
+    }
+
     function line(p0, p1) {
             ctx.lineWidth = 4;
-            ctx.strokeStyle= "rgba(0, 0, 0, 1)";
+            ctx.strokeStyle=  color;
             ctx.beginPath();
             ctx.moveTo(p0[0], p0[1]);
             ctx.lineTo(p1[0], p1[1]);
@@ -39,7 +44,7 @@ var wbcanvas = function(id, connector) {
 
 
     obj.mousemove(function(e){
-      var pos = [e.clientX - srcX, e.clientY - srcY];
+      var pos = [e.clientX - this.offsetLeft, e.clientY - this.offsetTop];
       if(drawing) {
           send({c: 'l', p0: lastpos, p1: pos});
       }
@@ -57,6 +62,7 @@ var wbcanvas = function(id, connector) {
         //todo send command
         //send("d");
     });
+    return this;
 }
 
 var whiteboard = function() {
@@ -82,10 +88,21 @@ var whiteboard = function() {
     return this;
 }
 
-
-
 function getCookie(name) {
     var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
     return r ? r[1] : undefined;
 }
 
+var toolbar = function(id, cnvs) {
+    var obj = $("#" + id);
+    var canvas = cnvs;
+
+    obj.find("#red").click(function() {
+        canvas.set_color("rgba(255, 0, 0, 1)");
+    });
+
+    obj.find("#black").click(function() {
+        canvas.set_color("rgba(0, 0, 0, 1)");
+    });
+    
+}

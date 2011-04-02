@@ -13,14 +13,23 @@
             wb = whiteboard();
             wb.init();
             c = wbcanvas('whiteboard', wb);
+            tool = toolbar('toolbar', c);
         });
         </script>
     </head>
     <body>
-    <div id="info">
-    </div>
+    
     <div id="wrapper">
-    <canvas id="whiteboard" style="margin:0; padding: 0;"></canvas>
+        <div id="hack">
+            <div id="toolbar">
+                <ul id="tools">
+                    <li id="red" class="tool color red">&nbsp;</li>
+                    <li id="black" class="tool color black">&nbsp;</li>
+                </ul> <!-- tools -->
+            </div> <!-- toolbar -->
+        </div>
+
+        <canvas id="whiteboard" style="margin:0; padding: 0;"></canvas>
     </div>
 
         

@@ -1,10 +1,70 @@
 
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
 #whiteboard {
 }
 
+#hack {
+    position: relative;
+}
 #wrapper {
     width: 800px;
     margin: 20px auto;
     -webkit-box-shadow: 0px 0px 10px #888;
     -moz-box-shadow: 0px 0px 10px #888;
+}
+
+#tools {
+}
+#tools .tool {
+}
+
+#tools .color {
+    padding: 1px 0.5em;
+}
+
+#tools .red {
+    background-color: #F00;
+}
+
+#tools .black{
+    background-color: #000;
+}
+
+ol, ul {
+    list-style: none;
+}
+li {
+    display: inline;
+}
+
+#toolbar {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 10px 15px;
+    background-color: #CCC;
+    border-radius: 9px;
+    -webkit-box-shadow: 0px 0px 10px #CCC;
+    -moz-box-shadow: 0px 0px 10px #CCC;
 }
