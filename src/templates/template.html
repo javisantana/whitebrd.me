@@ -27,9 +27,9 @@
         <div id="hack">
             <div id="toolbar">
                 <ul id="tools">
-                    width
                     <li id="width_selector" class="tool ">
-                         <select id="line_size">
+                        <img src="{{ static_url("img/paint_brush.png") }}"  width="32"/>
+                         <select style="margin-left: -8px;" id="line_size">
                             <option value="2">1</option>
                             <option value="4">2</option>
                             <option value="8">3</option>
@@ -39,7 +39,11 @@
                     <li id="red" class="tool color red">&nbsp;</li>
                     <li id="black" class="tool color black selected">&nbsp;</li>
                     <li id="white" class="tool color white">&nbsp;</li>
-                    <li id="clear" class="tool">clear</li>
+                    <li id="clear" class="tool">
+                    <img src="{{ static_url("img/trash.png") }}"  width="32"/>
+                    </li>
+                    <li><a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="flopezluis" data-related="javisantana">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script></li>
+
                 </ul> <!-- tools -->
             </div> <!-- toolbar -->
         </div>

@@ -34,11 +34,20 @@ time, mark, audio, video {
     -moz-box-shadow: 0px 0px 20px #FFF;
 }
 
+#tools img {
+vertical-align: middle;
+margin:0;
+}
 #tools {
     font-size: 30px;
 }
 #tools .tool {
     border: 1px solid #CCC;
+}
+
+#tools #clear {
+    margin-left: 30px;
+    margin-right: 30px;
 }
 
 #tools .color {
