@@ -14,8 +14,8 @@ redis = brukva.Client()
 redis.connect()
 
 class WhiteboardHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.render("template.html", title="Websocket test")
+    def get(self, channel):
+        self.render("template.html",channel=channel, title="Websocket test")
 
 class CreateWhitebrdHandler(tornado.web.RequestHandler):
     
@@ -27,17 +27,18 @@ class CreateWhitebrdHandler(tornado.web.RequestHandler):
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("index.html", title="Whiteboard.me")
+
 class MessagesCatcher(tornado.websocket.WebSocketHandler):
 
     def __init__(self, *args, **kwargs):
         super(MessagesCatcher, self).__init__(*args, **kwargs)
-        self.board_name = 'board:1'
         self.client = brukva.Client()
         self.client.connect()
-        self.client.subscribe(self.board_name)
 
-    def open(self):
+    def open(self, channel):
         #logging.info("opened connection")
+        self.board_name = 'board:' + channel
+        self.client.subscribe(self.board_name)
         self.client.listen(self.on_new_board_message)
 
     def on_new_board_message(self, result):
@@ -63,8 +64,8 @@ class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
             (r'/', MainHandler),
-            (r'/board/', WhiteboardHandler),
-            (r'/track', MessagesCatcher),
+            (r'/board/(.+)', WhiteboardHandler),
+            (r'/track/(.+)', MessagesCatcher),
             (r'/new_board/', CreateWhitebrdHandler),
         ]
         settings = dict(

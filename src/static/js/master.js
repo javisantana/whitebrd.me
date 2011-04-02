@@ -65,8 +65,8 @@ var whiteboard = function() {
     this.on_message = function(data) {
         console.log(data);
     }
-    this.init = function() {
-        ws = new WebSocket("ws://" + window.location.host+ "/track");
+    this.init = function(board) {
+        ws = new WebSocket("ws://" + window.location.host+ "/track/" + board);
         ws.onopen = function() {
         }
         ws.onmessage = function(event) {
