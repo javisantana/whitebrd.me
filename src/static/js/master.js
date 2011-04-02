@@ -13,7 +13,7 @@ var wbcanvas = function(id, connector) {
     var color = "rgba(0, 0, 0, 1)";
     var size = 4;
 
-    var lastpos = [0,0];
+    var lastpos = null;
 
     function send(c) {
         evaluate(c);
@@ -49,6 +49,7 @@ var wbcanvas = function(id, connector) {
 
     function evaluate(cmd) {
         var old_color = color; 
+        var old_size = size; 
         if (cmd.size){
             size = cmd.size;
         }
@@ -65,7 +66,7 @@ var wbcanvas = function(id, connector) {
                break; 
         }
         color = old_color;
-
+        size = old_size;
     }
     
    
@@ -75,22 +76,23 @@ var wbcanvas = function(id, connector) {
     );
 
     obj.bind("touchend", function (event) {
-                drawing = false;
-            lastpos =  [event.touches[0].pageX - this.offsetLeft,event.touches[0].pageY- this.offsetTop];
+            drawing = false;
+            lastpos = null;
         }
     );
 
     function touchMove(event) {
+        if (!event.touches) return 
         var x = event.touches[0].pageX;
         var y = event.touches[0].pageY
-                        
-       move({clientX:x, clientY:y});
+          
+           move({clientX:x, clientY:y});
     }
     obj.bind("touchmove", touchMove);
 
     function move(e){
       var pos = [e.clientX - this.offsetLeft, e.clientY - this.offsetTop];
-      if(drawing) {
+      if(drawing && lastpos) {
           send({c: 'l', p0: lastpos, p1: pos, color:color, size:size});
       }
       lastpos = pos;
