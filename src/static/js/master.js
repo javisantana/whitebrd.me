@@ -31,7 +31,10 @@ var wbcanvas = function(id, connector) {
     this.set_line_size = function(s) {
         size = s;
     }
-
+    
+    this.clear = function() {
+        send({c: 'clear'});
+    }
 
     function line(p0, p1) {
             ctx.lineCap="round";
@@ -45,26 +48,37 @@ var wbcanvas = function(id, connector) {
     }
 
     function evaluate(cmd) {
-        if (cmd.c == 'l') {
-            line(cmd.p0, cmd.p1);
-        }
+        var old_color = color; 
         if (cmd.size){
             size = cmd.size;
         }
         if (cmd.color) {
             color = cmd.color;
         }
+        switch (cmd.c) {
+            case 'l': 
+                line(cmd.p0, cmd.p1);
+                break;
+            case 'clear':
+                 ctx.clearRect (0 ,0 , canvas.width , canvas.height );
+
+               break; 
+        }
+        color = old_color;
+
     }
     
-    function touchStart(event) {
+   
+    obj.bind("touchstart",  function (event) {
             drawing = true;
-    }
-    obj.bind("touchstart", touchStart);
+        }
+    );
 
-    function touchEnd(event) {
-            drawing = false;
-    }
-    obj.bind("touchend", touchEnd);
+    obj.bind("touchend", function (event) {
+                drawing = false;
+            lastpos =  [event.touches[0].pageX - this.offsetLeft,event.touches[0].pageY- this.offsetTop];
+        }
+    );
 
     function touchMove(event) {
         var x = event.touches[0].pageX;
@@ -72,7 +86,7 @@ var wbcanvas = function(id, connector) {
                         
        move({clientX:x, clientY:y});
     }
-    obj.bind("touchend", touchEnd);
+    obj.bind("touchmove", touchMove);
 
     function move(e){
       var pos = [e.clientX - this.offsetLeft, e.clientY - this.offsetTop];
@@ -156,7 +170,10 @@ var toolbar = function(id, cnvs) {
         canvas.set_color("rgba(255, 255, 255, 1)");
         sel(this);
     });
- 
+    obj.find("#clear").click(function() {
+        canvas.clear();
+    });
+  
     $('#line_size').change(function() {
         canvas.set_line_size($(this).val());      
     });
