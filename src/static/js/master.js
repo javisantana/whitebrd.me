@@ -13,6 +13,9 @@ var wbcanvas = function(id, connector) {
     var color = "rgba(0, 0, 0, 1)";
     var size = 4;
 
+    ctx.fillStyle= "rgba(255, 255, 255, 1)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
     var lastpos = [0,0];
 
     function send(c) {
@@ -60,7 +63,8 @@ var wbcanvas = function(id, connector) {
                 line(cmd.p0, cmd.p1);
                 break;
             case 'clear':
-                 ctx.clearRect (0 ,0 , canvas.width , canvas.height );
+                 ctx.fillStyle= "rgba(255, 255, 255, 1)";
+                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
                break; 
         }
