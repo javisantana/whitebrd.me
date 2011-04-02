@@ -72,7 +72,7 @@ var whiteboard = function() {
         console.log(data);
     }
     this.init = function(board) {
-        ws = new WebSocket("ws://" + window.location.host+ "/track/" + board);
+        ws = new WebSocket("ws://" + window.location.host+ ":8000/track/" + board);
         ws.onopen = function() {
         }
         ws.onmessage = function(event) {
