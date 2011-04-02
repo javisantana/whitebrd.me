@@ -39,6 +39,9 @@ class MessagesCatcher(tornado.websocket.WebSocketHandler):
     def open(self):
         #logging.info("opened connection")
         self.client.listen(self.on_new_board_message)
+        # when clien connects send all commands written
+        #for cmd in iter(get_commands()):
+            #self.write_message(cmd)
 
     def on_new_board_message(self, result):
         """ called when other client draws """
@@ -56,6 +59,7 @@ class MessagesCatcher(tornado.websocket.WebSocketHandler):
         """ client message with draw command """
             # publish to other clients
         redis.publish(self.board_name, result)
+        # self.channel.add_command(result)
 
     def close(self):
         self.client.unsubscribe(self.board_name)
