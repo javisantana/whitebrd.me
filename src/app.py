@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-
+import uuid
 import logging
 import os
 import brukva
@@ -7,7 +7,7 @@ import tornado.httpserver
 import tornado.web
 import tornado.websocket
 import tornado.ioloop
-
+from models import Channel
 from tornado.options import define, options
 
 redis = brukva.Client()
@@ -16,6 +16,12 @@ redis.connect()
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("template.html", title="Websocket test")
+
+class CreateWhitebrdHandler(tornado.web.RequestHandler):
+    
+    def get(self):
+        channel = Channel() 
+
 
 class MessagesCatcher(tornado.websocket.WebSocketHandler):
 
@@ -68,6 +74,7 @@ class Application(tornado.web.Application):
         handlers = [
             (r'/', MainHandler),
             (r'/track', MessagesCatcher),
+            (r'/new_board/', CreateWhitebrdHandler),
         ]
         settings = dict(
             cookie_secret="43oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=",
