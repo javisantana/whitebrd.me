@@ -157,7 +157,6 @@ body, html {
   color: #F2F2F2; 
 }
 
-/*text-shadow: 0 1px 0 rgba(255, 255, 255, .5);*/
 
 #steps {
     margin-top: 15px;
@@ -183,4 +182,17 @@ body, html {
     border-radius: 12px;
     color: white;
     margin-right: 10px;
+}
+
+#header  {
+    text-align: center;
+    margin-top: 10px;
+}
+
+#header p {
+    font-size: 0.9em;
+    /*text-shadow: 0 1px 0 rgba(0, 0, 0, .5);*/
+}
+#header a{
+    color: #06c;
 }
