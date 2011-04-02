@@ -37,6 +37,7 @@ var wbcanvas = function(id, connector) {
             ctx.lineWidth = size;
             ctx.strokeStyle=  color;
             ctx.beginPath();
+            ctx.lineJoin="round";
             ctx.moveTo(p0[0], p0[1]);
             ctx.lineTo(p1[0], p1[1]);
             ctx.stroke();
@@ -53,15 +54,34 @@ var wbcanvas = function(id, connector) {
             color = cmd.color;
         }
     }
+    
+    function touchStart(event) {
+            drawing = true;
+    }
+    obj.bind("touchstart", touchStart);
 
+    function touchEnd(event) {
+            drawing = false;
+    }
+    obj.bind("touchend", touchEnd);
 
-    obj.mousemove(function(e){
+    function touchMove(event) {
+        var x = event.touches[0].pageX;
+        var y = event.touches[0].pageY
+                        
+       move({clientX:x, clientY:y});
+    }
+    obj.bind("touchend", touchEnd);
+
+    function move(e){
       var pos = [e.clientX - this.offsetLeft, e.clientY - this.offsetTop];
       if(drawing) {
           send({c: 'l', p0: lastpos, p1: pos, color:color, size:size});
       }
       lastpos = pos;
-    });
+    }
+
+    obj.mousemove(move);
 
     obj.mouseup(function(e) {
         drawing = false;
