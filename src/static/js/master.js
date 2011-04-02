@@ -34,6 +34,7 @@ var wbcanvas = function(id, connector) {
 
 
     function line(p0, p1) {
+            ctx.lineCap="round";
             ctx.lineWidth = size;
             ctx.strokeStyle=  color;
             ctx.beginPath();
@@ -116,12 +117,24 @@ var toolbar = function(id, cnvs) {
     var obj = $("#" + id);
     var canvas = cnvs;
 
+    function sel(id) {
+        $(".tool").removeClass('selected');
+        $(id).addClass('selected');
+        
+    }
     obj.find("#red").click(function() {
         canvas.set_color("rgba(255, 0, 0, 1)");
+        sel(this);
     });
 
     obj.find("#black").click(function() {
         canvas.set_color("rgba(0, 0, 0, 1)");
+        sel(this);
+    });
+
+    obj.find("#white").click(function() {
+        canvas.set_color("rgba(255, 255, 255, 1)");
+        sel(this);
     });
  
     $('#line_size').change(function() {

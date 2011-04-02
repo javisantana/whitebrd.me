@@ -37,18 +37,30 @@ time, mark, audio, video {
 #tools {
 }
 #tools .tool {
+    border: 1px solid #CCC;
 }
 
 #tools .color {
     padding: 1px 0.5em;
 }
 
+#tools #width_selector {
+    margin-right: 20px;
+}
+
 #tools .red {
     background-color: #F00;
 }
 
+#tools .selected {
+    border: 1px solid #0E0;
+}
 #tools .black{
     background-color: #000;
+}
+#tools #white{
+    background-color: #FFF;
+    margin-left: 20px;
 }
 
 ol, ul {
