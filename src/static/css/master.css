@@ -68,3 +68,19 @@ li {
     -webkit-box-shadow: 0px 0px 10px #CCC;
     -moz-box-shadow: 0px 0px 10px #CCC;
 }
+
+
+#onmap {
+    background-image: url('/static/img/bkg.png');
+    height: 277px;
+    left: 100px;
+    padding: 25px 28px 0;
+    position: absolute;
+    top: 40px;
+    width: 200px;
+}
+
+.outer {
+    margin: 0 auto;
+    width: 924px;
+}
