@@ -13,7 +13,7 @@ from tornado.options import define, options
 redis = brukva.Client()
 redis.connect()
 
-class MainHandler(tornado.web.RequestHandler):
+class WhiteboardHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("template.html", title="Websocket test")
 
@@ -21,8 +21,12 @@ class CreateWhitebrdHandler(tornado.web.RequestHandler):
     
     def get(self):
         channel = Channel() 
+        return self.write(tornado.escape.json_encode(channel.name))
 
 
+class MainHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("index.html", title="Whiteboard.me")
 class MessagesCatcher(tornado.websocket.WebSocketHandler):
 
     def __init__(self, *args, **kwargs):
@@ -59,6 +63,7 @@ class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
             (r'/', MainHandler),
+            (r'/board/', WhiteboardHandler),
             (r'/track', MessagesCatcher),
             (r'/new_board/', CreateWhitebrdHandler),
         ]
