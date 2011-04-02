@@ -11,6 +11,7 @@ var wbcanvas = function(id, connector) {
     canvas.width = 800;
     canvas.height = 800;
     var color = "rgba(0, 0, 0, 1)";
+    var size = 4;
 
     var lastpos = [0,0];
 
@@ -27,8 +28,13 @@ var wbcanvas = function(id, connector) {
         color = c;
     }
 
+    this.set_line_size = function(s) {
+        size = s;
+    }
+
+
     function line(p0, p1) {
-            ctx.lineWidth = 4;
+            ctx.lineWidth = size;
             ctx.strokeStyle=  color;
             ctx.beginPath();
             ctx.moveTo(p0[0], p0[1]);
@@ -38,10 +44,13 @@ var wbcanvas = function(id, connector) {
 
     function evaluate(cmd) {
         if (cmd.c == 'l') {
-            if (cmd.color) {
-                color = cmd.color;
-            }
             line(cmd.p0, cmd.p1);
+        }
+        if (cmd.size){
+            size = cmd.size;
+        }
+        if (cmd.color) {
+            color = cmd.color;
         }
     }
 
@@ -49,7 +58,7 @@ var wbcanvas = function(id, connector) {
     obj.mousemove(function(e){
       var pos = [e.clientX - this.offsetLeft, e.clientY - this.offsetTop];
       if(drawing) {
-          send({c: 'l', p0: lastpos, p1: pos, color:color});
+          send({c: 'l', p0: lastpos, p1: pos, color:color, size:size});
       }
       lastpos = pos;
     });
@@ -114,5 +123,9 @@ var toolbar = function(id, cnvs) {
     obj.find("#black").click(function() {
         canvas.set_color("rgba(0, 0, 0, 1)");
     });
-    
+ 
+    $('#line_size').change(function() {
+        canvas.set_line_size($(this).val());      
+    });
+        
 }
