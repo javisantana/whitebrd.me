@@ -66,11 +66,13 @@ class MessagesCatcher(tornado.websocket.WebSocketHandler):
     def close(self):
         self.client.unsubscribe(self.board_name)
         self.client.disconnect()
-        del self.client
+        #del self.client
+        """
         try:
             super(MessagesCatcher, self).close()
         except IOError:
             pass # java rocks
+        """
 
 
 define("port", default=8000, help="run on the given port", type=int)
