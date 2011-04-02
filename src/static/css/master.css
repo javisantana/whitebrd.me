@@ -35,6 +35,7 @@ time, mark, audio, video {
 }
 
 #tools {
+    font-size: 30px;
 }
 #tools .tool {
     border: 1px solid #CCC;
@@ -44,6 +45,11 @@ time, mark, audio, video {
     padding: 1px 0.5em;
 }
 
+#tools select {
+    font-size:2em;
+    line-height:57px;
+    height:27px;
+}
 #tools #width_selector {
     margin-right: 20px;
 }
