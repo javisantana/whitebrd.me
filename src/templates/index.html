@@ -16,8 +16,9 @@
                     method: 'GET',
                     dataType: 'json',
                     success: function(data) {
-                        $("#go_board").attr("href", '/board/' + data);
-                        $("#go_board").toggle()
+                        window.location = '/board/' + data
+                        //$("#go_board").attr("href", '/board/' + data);
+                        //$("#go_board").toggle()
                     }
                 });
             });
@@ -34,8 +35,15 @@
             <div id="onmap">
                 <h2>Whitebrd.me</h2>
                 <h3>share your drawings</h3>
-                <a href="#" id="new_board">new board</a>
+                <ul id="steps">
+                    <li><span>1</span>create new board</li>
+                    <li><span>2</span>share the url!</li>
+                </ul>
+                
+                <div id="action">
+                <a href="#"  class="button" id="new_board">new board</a>
                 <a href="#" id="go_board" style="display:none">new board</a>
+                </div>
             </div>
         </div>
     </div>
