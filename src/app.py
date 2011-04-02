@@ -52,14 +52,13 @@ class MessagesCatcher(tornado.websocket.WebSocketHandler):
         redis.publish(self.board_name, result)
 
     def close(self):
+        self.client.unsubscribe(self.board_name)
+        self.client.disconnect()
+        del self.client
         try:
             super(MessagesCatcher, self).close()
         except IOError:
             pass # java rocks
-            
-        self.client.unsubscribe(self.board_name)
-        self.client.disconnect()
-        del self.client
 
 
 define("port", default=8000, help="run on the given port", type=int)
