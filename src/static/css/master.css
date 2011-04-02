@@ -58,6 +58,7 @@ li {
     display: inline;
 }
 
+
 #toolbar {
     position: absolute;
     top: 10px;
@@ -76,10 +77,31 @@ li {
     left: 100px;
     padding: 25px 28px 0;
     position: absolute;
-    top: 40px;
-    width: 200px;
+    top: 80px;
 }
 
+#onmap h2 {
+    font-size: 70px;
+    line-height: 1em;
+    font-family: Helvetica, sans-serif;
+    font-weight: bold;
+    letter-spacing: -2px;
+}
+#onmap h3 {
+    font-size: 30px;
+    margin-top: 10px;
+    line-height: 1em;
+    font-family: Georgia, sans-serif;
+    letter-spacing: -2px;
+}
+body, html {
+    height: 100%;
+}
+#map_canvas {
+    background-image: url('/static/img/blackboard.jpg');
+    width: 100%;
+    height: 600px;
+}
 .outer {
     margin: 0 auto;
     width: 924px;
