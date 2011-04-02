@@ -38,6 +38,9 @@ var wbcanvas = function(id, connector) {
 
     function evaluate(cmd) {
         if (cmd.c == 'l') {
+            if (cmd.color) {
+                color = cmd.color;
+            }
             line(cmd.p0, cmd.p1);
         }
     }
@@ -46,7 +49,7 @@ var wbcanvas = function(id, connector) {
     obj.mousemove(function(e){
       var pos = [e.clientX - this.offsetLeft, e.clientY - this.offsetTop];
       if(drawing) {
-          send({c: 'l', p0: lastpos, p1: pos});
+          send({c: 'l', p0: lastpos, p1: pos, color:color});
       }
       lastpos = pos;
     });
