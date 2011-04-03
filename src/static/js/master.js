@@ -251,4 +251,13 @@ var toolbar = function(id, cnvs) {
     $('#play').click(function() {
         canvas.play();
     });   
+    
+    $('#mail').click(function() {
+        var name = prompt("Type the mail here");
+        if (name != "" && name != undefined) {
+            var url = location;
+            location = "mailto:" + name + "?subject=whitebrd.me&body=<a href='"+ url +"'>draw with me</a>";
+        }
+        return false;
+    });
 }
