@@ -30,27 +30,25 @@ var wbcanvas = function(id, connector) {
     }
     
     this.play = function() {
-       clear_screen();
+       clear();
        var CHUNK_INTERVAL = 25; // ms.
        var running = false, num_cmds = 0, processTimer;
 
-        function runChunk() {
+        function run() {
             window.clearTimeout(processTimer);
             processTimer = null;
             if (!running) return;
             // Some work chunk.  Let's simulate it:
             evaluate(cmds[num_cmds]);
-            ++num_cmds;
+            num_cmds++;
             if (num_cmds < cmds.length) {
-              processTimer = window.setTimeout(runChunk, CHUNK_INTERVAL);
+              processTimer = window.setTimeout(run, CHUNK_INTERVAL);
             } else {
               num_cmds = 0, running = false;
             }
         }
         running = true;
-        processTimer = window.setTimeout(runChunk, CHUNK_INTERVAL);
-
-      
+        processTimer = window.setTimeout(run, CHUNK_INTERVAL);
     }
     this.set_color = function(c) {
         color = c;
@@ -185,7 +183,7 @@ var whiteboard = function() {
     var ws;
 
     this.on_message = function(data) {
-//        console.log(data);
+        console.log(data);
     }
     this.init = function(board) {
         var url = "ws://" + window.location.host;
@@ -197,7 +195,7 @@ var whiteboard = function() {
         ws.onopen = function() {
         }
         ws.onmessage = function(event) {
-//            console.log(event.data);
+            console.log(event.data);
             on_message(JSON.parse(event.data));
 
         }
