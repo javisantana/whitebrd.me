@@ -12,8 +12,7 @@ var wbcanvas = function(id, connector) {
     canvas.height = document.body.clientHeight;
     var color = "rgba(0, 0, 0, 1)";
     var size = 4;
-
-
+    var running = false;
     var lastpos = null;
     ctx.fillStyle= "rgba(255, 255, 255, 1)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -21,18 +20,20 @@ var wbcanvas = function(id, connector) {
 
     function send(c) {
         evaluate(c);
-        cmds.push(c);
         connector.send(JSON.stringify(c));
     }
     
     connector.on_message = function(data) {
+        cmds.push(data);
         evaluate(data);
     }
     
     this.play = function() {
+       if (running) return;
+
        clear();
        var CHUNK_INTERVAL = 25; // ms.
-       var running = false, num_cmds = 0, processTimer;
+       var num_cmds = 0, processTimer;
 
         function run() {
             window.clearTimeout(processTimer);
@@ -223,15 +224,15 @@ var toolbar = function(id, cnvs) {
         $(id).addClass('selected');
         
     }
-    obj.find("#red").click(function() {
-        canvas.set_color("rgba(255, 0, 0, 1)");
-        sel(this);
-    });
+//    obj.find("#red").click(function() {
+//        canvas.set_color("rgba(255, 0, 0, 1)");
+//        sel(this);
+//    });
 
-    obj.find("#black").click(function() {
-        canvas.set_color("rgba(0, 0, 0, 1)");
-        sel(this);
-    });
+//    obj.find("#black").click(function() {
+//        canvas.set_color("rgba(0, 0, 0, 1)");
+//        sel(this);
+//    });
 
     obj.find("#white").click(function() {
         canvas.set_color("rgba(255, 255, 255, 1)");
@@ -251,4 +252,21 @@ var toolbar = function(id, cnvs) {
     $('#play').click(function() {
         canvas.play();
     });   
+    
+
+    $('#black').ColorPicker({
+        onSubmit: function(hsb, hex, rgb, el) {
+             canvas.set_color("rgba(" + rgb.r + "," + rgb.b + "," + rgb.b + ",1)");
+            $(el).val(hex);
+            $(el).ColorPickerHide();
+            $("#black").ColorPickerHide();
+        },
+        onBeforeShow: function () {
+            $(this).ColorPickerSetColor(this.value);
+        }
+    })
+    .bind('keyup', function(){
+        $(this).ColorPickerSetColor(this.value);
+    });
+        
 }
