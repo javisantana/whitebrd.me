@@ -1,7 +1,7 @@
 
 
 var wbcanvas = function(id, connector) {
-
+    var cmds = [];
     var obj = $("#"+id);
     var drawing = false;
     var canvas = document.getElementById('whiteboard');
@@ -13,6 +13,7 @@ var wbcanvas = function(id, connector) {
     var color = "rgba(0, 0, 0, 1)";
     var size = 4;
 
+
     var lastpos = null;
     ctx.fillStyle= "rgba(255, 255, 255, 1)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -20,6 +21,7 @@ var wbcanvas = function(id, connector) {
 
     function send(c) {
         evaluate(c);
+        cmds.push(c);
         connector.send(JSON.stringify(c));
     }
     
@@ -27,6 +29,29 @@ var wbcanvas = function(id, connector) {
         evaluate(data);
     }
     
+    this.play = function() {
+       clear_screen();
+       var CHUNK_INTERVAL = 25; // ms.
+       var running = false, num_cmds = 0, processTimer;
+
+        function runChunk() {
+            window.clearTimeout(processTimer);
+            processTimer = null;
+            if (!running) return;
+            // Some work chunk.  Let's simulate it:
+            evaluate(cmds[num_cmds]);
+            ++num_cmds;
+            if (num_cmds < cmds.length) {
+              processTimer = window.setTimeout(runChunk, CHUNK_INTERVAL);
+            } else {
+              num_cmds = 0, running = false;
+            }
+        }
+        running = true;
+        processTimer = window.setTimeout(runChunk, CHUNK_INTERVAL);
+
+      
+    }
     this.set_color = function(c) {
         color = c;
     }
@@ -35,7 +60,7 @@ var wbcanvas = function(id, connector) {
         size = s;
     }
     
-    this.clear = function() {
+    this.clear_screen = function() {
         send({c: 'clear'});
     }
 
@@ -49,6 +74,30 @@ var wbcanvas = function(id, connector) {
             ctx.lineTo(p1[0], p1[1]);
             ctx.stroke();
     }
+    
+    function clear() {
+         ctx.fillStyle= "rgba(255, 255, 255, 1)";
+         ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    }
+    this.applyEffect = function applyEffect() {
+        // Get the CanvasPixelArray from the given coordinates and dimensions.
+        var imgd =  ctx.getImageData(0, 0, canvas.width, canvas.height);
+        var pix = imgd.data;
+
+        // Loop over each pixel and invert the color.
+        for (var i = 0, n = pix.length; i < n; i += 4) {
+            pix[i  ] = 255 - pix[i  ]; // red
+            pix[i+1] = 255 - pix[i+1]; // green
+            pix[i+2] = 255 - pix[i+2]; // blue
+            // i+3 is alpha (the fourth element)
+        }
+
+        // Draw the ImageData at the given (x,y) coordinates.
+        ctx.putImageData(imgd, 0, 0);
+    }           
+
+
 
     function evaluate(cmd) {
         var old_color = color; 
@@ -64,10 +113,11 @@ var wbcanvas = function(id, connector) {
                 line(cmd.p0, cmd.p1);
                 break;
             case 'clear':
-                 ctx.fillStyle= "rgba(255, 255, 255, 1)";
-                 ctx.fillRect(0, 0, canvas.width, canvas.height);
-
+                clear();
                break; 
+             case 'apply':
+                 applyEffect();
+                 break;
         }
         color = old_color;
         size = old_size;
@@ -122,7 +172,7 @@ var whiteboard = function() {
     var ws;
 
     this.on_message = function(data) {
-        console.log(data);
+//        console.log(data);
     }
     this.init = function(board) {
         var url = "ws://" + window.location.host;
@@ -134,7 +184,7 @@ var whiteboard = function() {
         ws.onopen = function() {
         }
         ws.onmessage = function(event) {
-            console.log(event.data);
+//            console.log(event.data);
             on_message(JSON.parse(event.data));
 
         }
@@ -177,11 +227,17 @@ var toolbar = function(id, cnvs) {
         sel(this);
     });
     obj.find("#clear").click(function() {
-        canvas.clear();
+        canvas.clear_screen();
     });
   
     $('#line_size').change(function() {
         canvas.set_line_size($(this).val());      
     });
-        
+    $('#effect').click(function() {
+        canvas.applyEffect();
+    });   
+
+    $('#play').click(function() {
+        canvas.play();
+    });   
 }
