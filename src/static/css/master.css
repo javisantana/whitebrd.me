@@ -42,7 +42,7 @@ margin:0;
     font-size: 30px;
 }
 #tools .tool {
-    border: 1px solid #CCC;
+    border: 2px solid #CCC;
 }
 
 #tools #clear {
@@ -68,7 +68,7 @@ margin:0;
 }
 
 #tools .selected {
-    border: 1px solid #0E0;
+    border: 2px solid #0E0;
 }
 #tools .black{
     background-color: #000;
@@ -123,6 +123,7 @@ li {
 }
 body, html {
     height: 100%;
+    /*overflow: hidden;*/
 }
 #bkg {
     background-image: url('/static/img/blackboard.jpg');

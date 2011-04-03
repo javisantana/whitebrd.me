@@ -8,8 +8,8 @@ var wbcanvas = function(id, connector) {
     var ctx = canvas.getContext('2d');
     var srcX = 0; //obj.position().left;
     var srcY = 0; //obj.position().top;
-    canvas.width = 800;
-    canvas.height = 800;
+    canvas.width = document.body.clientWidth;
+    canvas.height = document.body.clientHeight;
     var color = "rgba(0, 0, 0, 1)";
     var size = 4;
 
@@ -110,7 +110,9 @@ var wbcanvas = function(id, connector) {
         }
         switch (cmd.c) {
             case 'l': 
-                line(cmd.p0, cmd.p1);
+                var p0 = denormalize(cmd.p0);
+                var p1 = denormalize(cmd.p1);
+                line(p0, p1);
                 break;
             case 'clear':
                 clear();
@@ -144,10 +146,21 @@ var wbcanvas = function(id, connector) {
     }
     obj.bind("touchmove", touchMove);
 
+    function normalize(pos) {
+        var p0 = pos[0]/canvas.width;
+        var p1 = pos[1]/canvas.height;
+        return [p0, p1];
+    }
+    function denormalize(pos) {
+        var p0 = pos[0]*canvas.width;
+        var p1 = pos[1]*canvas.height;
+        return [p0, p1];
+    }
     function move(e){
       var pos = [e.clientX - this.offsetLeft, e.clientY - this.offsetTop];
       if(drawing && lastpos) {
-          send({c: 'l', p0: lastpos, p1: pos, color:color, size:size});
+          //normalize pos
+          send({c: 'l', p0: normalize(lastpos), p1: normalize(pos), color:color, size:size});
       }
       lastpos = pos;
     }
