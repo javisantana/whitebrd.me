@@ -1,5 +1,10 @@
 
 
+function check_nav() {
+    if(-1 == navigator.userAgent.toLowerCase().indexOf('webkit')) {
+        alert("your navigator is not supported, sorry. You can user google chrome or safari");
+    }
+}
 var wbcanvas = function(id, connector) {
     var cmds = [];
     var obj = $("#"+id);

@@ -18,6 +18,7 @@
         <link rel="stylesheet" href="{{ static_url("colorpicker/css/colorpicker.css") }}" type="text/css" />
         <script>
         $(document).ready(function() {
+            check_nav();
             wb = whiteboard();
             wb.init('{{channel}}');
             c = wbcanvas('whiteboard', wb);
