@@ -10,8 +10,12 @@
         <script src="{{ static_url("js/master.js") }}"></script>
         <script src="{{ static_url("js/json2.js") }}"></script>
         <script src="{{ static_url("js/jquery.ui.touch.js") }}"></script>
+        <script src="{{ static_url("colorpicker/js/colorpicker.js") }}"></script>
+        <script src="{{ static_url("colorpicker/js/eye.js") }}"></script>
+        <script src="{{ static_url("colorpicker/js/utils.js") }}"></script>
+        <script type="text/javascript" src="{{ static_url("colorpicker/js/layout.js?ver=1.0.2") }}"></script>
         <link rel="stylesheet" href="{{ static_url("css/master.css") }}" type="text/css" />
-
+        <link rel="stylesheet" href="{{ static_url("colorpicker/css/colorpicker.css") }}" type="text/css" />
         <script>
         $(document).ready(function() {
             wb = whiteboard();
@@ -36,8 +40,9 @@
                             <option value="16">4</option>
                         </select>
                     </li>
-                    <li id="red" class="tool color red">&nbsp;</li>
-                    <li id="black" class="tool color black selected">&nbsp;</li>
+<!--                    <li id="red" class="tool color red">&nbsp;</li>-->
+                    <li id="black" class="tool "><img src="{{ static_url("img/picker.png") }}"  width="32"/>
+</li>
                     <li id="white" class="tool color white">&nbsp;</li>
                     <li id="clear" class="tool">
                     <img src="{{ static_url("img/trash.png") }}"  width="32"/>
@@ -49,6 +54,9 @@
                     <li id="mail" class="tool"><img src="{{ static_url("img/mail_2.png") }}"  width="32"/> </li>
     
                     <li><a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="flopezluis" data-related="javisantana">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script></li>
+                    <li>				
+					<div id="colorSelector" class="toolbar"><div style="background-color: #0000ff"></div></div>
+				</li>
 
                 </ul> <!-- tools -->
             </div> <!-- toolbar -->
