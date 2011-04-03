@@ -41,9 +41,11 @@
                         </select>
                     </li>
 <!--                    <li id="red" class="tool color red">&nbsp;</li>-->
-                    <li id="black" class="tool "><img src="{{ static_url("img/picker.png") }}"  width="32"/>
-</li>
-                    <li id="white" class="tool color white">&nbsp;</li>
+                    <li id="colorpicker" class="tool "><img id="img_color_picker" src="{{ static_url("img/picker.png") }}"  width="32"/>
+                    </li>
+                    <li id="white" class="tool color white">&nbsp;
+                    <img src="{{ static_url("img/edit_clear.png") }}"  width="32"/>
+                    </li>
                     <li id="clear" class="tool">
                     <img src="{{ static_url("img/trash.png") }}"  width="32"/>
                     </li>
@@ -55,7 +57,6 @@
     
                     <li><a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="flopezluis" data-related="javisantana">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script></li>
                     <li>				
-					<div id="colorSelector" class="toolbar"><div style="background-color: #0000ff"></div></div>
 				</li>
 
                 </ul> <!-- tools -->

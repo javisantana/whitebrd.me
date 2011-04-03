@@ -224,15 +224,6 @@ var toolbar = function(id, cnvs) {
         $(id).addClass('selected');
         
     }
-//    obj.find("#red").click(function() {
-//        canvas.set_color("rgba(255, 0, 0, 1)");
-//        sel(this);
-//    });
-
-//    obj.find("#black").click(function() {
-//        canvas.set_color("rgba(0, 0, 0, 1)");
-//        sel(this);
-//    });
 
     obj.find("#white").click(function() {
         canvas.set_color("rgba(255, 255, 255, 1)");
@@ -262,12 +253,14 @@ var toolbar = function(id, cnvs) {
         return false;
     });
 
-    $('#black').ColorPicker({
+    $('#colorpicker').ColorPicker({
         onSubmit: function(hsb, hex, rgb, el) {
-             canvas.set_color("rgba(" + rgb.r + "," + rgb.b + "," + rgb.b + ",1)");
+             canvas.set_color("rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + ",1)");
             $(el).val(hex);
             $(el).ColorPickerHide();
             $("#black").ColorPickerHide();
+            
+            $('#img_color_picker').css("border", "3px dashed #" + hex);
         },
         onBeforeShow: function () {
             $(this).ColorPickerSetColor(this.value);
