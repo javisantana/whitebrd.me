@@ -14,9 +14,10 @@ from publisher import Publisher
 
 publisher = Publisher()
 
+TITLE = "whitebrd.me - share your drawings"
 class WhiteboardHandler(tornado.web.RequestHandler):
     def get(self, channel):
-        self.render("template.html",channel=channel, title="Websocket test")
+        self.render("template.html",channel=channel, title=TITLE)
 
 class CreateWhitebrdHandler(tornado.web.RequestHandler):
     
@@ -27,7 +28,7 @@ class CreateWhitebrdHandler(tornado.web.RequestHandler):
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render("index.html", title="Whiteboard.me")
+        self.render("index.html", title=TITLE)
 
 
 
