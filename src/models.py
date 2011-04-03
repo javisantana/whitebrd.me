@@ -13,6 +13,10 @@ class Channel(object):
             self.name = str(uuid.uuid1())
             r.rpush(CHANNELS, self.name)
 
+    @staticmethod
+    def all():
+        return r.lrange(CHANNELS, 0, -1)
+
     def add_command(self, cmd):
         """ add command to channel command list """
         r.rpush(self.name + ":commands", cmd)

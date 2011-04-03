@@ -30,6 +30,11 @@ class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("index.html", title=TITLE)
 
+class Admin(tornado.web.RequestHandler):
+    def get(self):
+        self.render("admin.html", boards=Channel.all())
+
+
 
 
 class MessagesCatcher(tornado.websocket.WebSocketHandler):
@@ -79,6 +84,7 @@ class Application(tornado.web.Application):
             (r'/board/(.+)', WhiteboardHandler),
             (r'/track/(.+)', MessagesCatcher),
             (r'/new_board/', CreateWhitebrdHandler),
+            (r'/adm', Admin),
         ]
         settings = dict(
             cookie_secret="43oETzKXQAGaYdkL5gEmGeJJFuYh7EQnp2XdTP1o/Vo=",

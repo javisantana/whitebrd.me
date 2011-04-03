@@ -1,0 +1,11 @@
+<html>
+<body>
+    <h1>Boards</h1>
+    <p>{{len(boards)}} boards </p>
+    <ul>
+        {% for ch in boards %}
+        <li><a href="/board/{{ch}}">{{ch}}</a></li>
+        {% end %}
+    </ul>
+</body>
+</html>
