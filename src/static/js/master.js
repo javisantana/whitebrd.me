@@ -232,7 +232,6 @@ var toolbar = function(id, cnvs) {
 
     obj.find("#white").click(function() {
         canvas.set_color("rgba(255, 255, 255, 1)");
-        sel(this);
     });
     obj.find("#clear").click(function() {
         canvas.clear_screen();
@@ -259,7 +258,7 @@ var toolbar = function(id, cnvs) {
     });
 
     $('#colorpicker').ColorPicker({
-        onSubmit: function(hsb, hex, rgb, el) {
+        onChange: function(hsb, hex, rgb, el) {
              canvas.set_color("rgba(" + rgb.r + "," + rgb.g + "," + rgb.b + ",1)");
             $(el).val(hex);
             $(el).ColorPickerHide();
