@@ -2,7 +2,7 @@
 
 function check_nav() {
     if(-1 == navigator.userAgent.toLowerCase().indexOf('webkit')) {
-        alert("your navigator is not supported, sorry. You can user google chrome or safari");
+        alert("your navigator is not supported, sorry. You can use google chrome or safari for the moment. We're working very hard on firefox version");
     }
 }
 var wbcanvas = function(id, connector) {
